@@ -1,4 +1,4 @@
-RengeBot : A discord bot for fun
+Discord mmo client
 ===================
 
 Installation :
@@ -12,17 +12,6 @@ Installation :
  ```
  node app.js
  ```
- 
- 
-```
-'use strict';
-
-module.exports = {
-    email: 'yourbotemail',
-    password: 'yourpassword'
-}
-```
-
 
 Configuration :
 -------------
