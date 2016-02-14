@@ -1,0 +1,13 @@
+{
+    "apiUrl": "http://localhost:2101",
+    "auth": {
+        "email": "youremail",
+        "password": "yourpassword"
+    },
+    "bot": {
+        "name": "GameBot",
+        "id": "140985448037089290"
+    },
+    "cmd": "--",
+    "env": "DEBUG"
+}

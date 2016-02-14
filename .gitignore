@@ -1,0 +1,7 @@
+node_modules
+auth.js
+**.exe
+typings
+Thumbs.db
+tenc
+logs**

@@ -1,0 +1,7 @@
+{
+    "ping": "pong.",
+    "channel:allow": "%cmd%channel:allow\n\nRegisters the current channel to RengeBot so she can use it.",
+    "channel:unallow" : "%cmd%channel:unallow\n\nUnregisters the current channel so RengeBot can not use it anymore.",
+    "help": "%cmd%help <command>\n\nShow help on the given command",
+    "register": "%cmd%register\n\nRegister the user to the game server"
+}
