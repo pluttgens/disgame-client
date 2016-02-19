@@ -1,7 +1,12 @@
 {
-    "ping": "pong.",
-    "channel:allow": "%cmd%channel:allow\n\nRegisters the current channel to RengeBot so she can use it.",
-    "channel:unallow" : "%cmd%channel:unallow\n\nUnregisters the current channel so RengeBot can not use it anymore.",
-    "help": "%cmd%help <command>\n\nShow help on the given command",
-    "register": "%cmd%register\n\nRegister the user to the game server"
+  "ping": "pong.",
+  "channel:allow": "%cmd%channel:allow\n\nRegisters the current channel to the bot.",
+  "channel:unallow" : "%cmd%channel:unallow\n\nUnregisters the current channel from the bot.",
+  "server:allow" : "%cmd%servr:allow\n\nRegisters every channels from the server to the bot.",
+  "server:unallow" : "%cmd%server:unallow\n\nUnregisters every channels from the server from the bot.",
+  "server:invite" : "%cmd%server:invite <invite_url | invite_code>\n\nInvite the bot to a server with an invite link or invite code.",
+  "help": "%cmd%help <command>\n\nShow help on the given command",
+  "user:register": "%cmd%user:register\n\nRegister the user to the game server",
+  "character:create": "%cmd%character:create\n\nInitiate the character creation. User need to be registered first.",
+  "character:select": "%cmd%character:select\n\nAllow the user to select one of his characters."
 }
