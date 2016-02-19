@@ -13,11 +13,9 @@
     "body-parser": "^1.14.2",
     "discord.io": "^1.7.1",
     "express": "^4.13.4",
-    "javascript.util": "^0.12.12",
     "jsonfile": "^2.2.3",
     "mongoose": "^4.3.7",
     "morgan": "^1.6.1",
-	"needle": "^1.0.0",
     "request": "^2.69.0",
     "winston": "^2.1.1",
     "ws": "^0.8.0"

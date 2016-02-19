@@ -23,12 +23,13 @@ module.exports = function (bot) {
     require('./core/help')(callbackHandler);
     require('./core/channels')(callbackHandler);
     require('./core/server')(callbackHandler);
+    require('./core/cancel')(callbackHandler);
 
     // ping
     require('./ping/ping')(callbackHandler);
 
     //game
-    require('./game/users')(callbackHandler);
+    require('./game/game')(callbackHandler);
 
     const MsgHelper = require('../helpers/messages')(bot);
 

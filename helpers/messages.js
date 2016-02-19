@@ -88,11 +88,10 @@ MessageHelper.prototype.isDirectMessage = function() {
 };
 
 MessageHelper.prototype.error = function (err) {
-    if (config.env === 'DEBUG') {
-        this.reply(err);
-    } else {
-        this.reply('Internal Server Error.');
+    if (err.code === 'ECONNREFUSED') {
+        return this.reply('Could not connect to the server.');
     }
+    this.reply('Internal Server Error.');
 };
 
 module.exports = function (bot) {
