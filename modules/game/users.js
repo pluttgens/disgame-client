@@ -29,7 +29,7 @@ module.exports = function (handler) {
                 return msgHelper.reply(body.error);
             }
 
-            msgHelper.reply('Welcome ' + msgHelper.getEvent().d.author.username + '!\n' +
+            msgHelper.reply('Welcome ' + msgHelper.event.d.author.username + '!\n' +
                 '----------------------------------------------------------------------------------', (err, response) => {
                     if (err) {
                         return winston.debug(err);
@@ -53,7 +53,7 @@ module.exports = function (handler) {
 
         async.series({
             init: (next) => {
-                msgHelper.reply(msgHelper.getEvent().d.author.username + ', create your character!', (err, response) => {
+                msgHelper.reply(msgHelper.event.d.author.username + ', create your character!', (err, response) => {
                     if (err) {
                         return next(err);
                     }
@@ -63,7 +63,7 @@ module.exports = function (handler) {
             },
             name: (next) => {
                 context.callback = (msgHelper) => {
-                    let name = msgHelper.getEvent().d.content;
+                    let name = msgHelper.event.d.content;
 
                     request({
                         url: config.apiUrl + '/characters/',
@@ -92,7 +92,7 @@ module.exports = function (handler) {
                         });
 
                     });
-                }
+                };
                 msgHelper.reply('Enter character name :');
             },
             race: (next) => {
@@ -116,7 +116,7 @@ module.exports = function (handler) {
                     });
 
                     context.callback = (msgHelper) => {
-                        let race = msgHelper.getEvent().d.content;
+                        let race = msgHelper.event.d.content;
 
                         if (isNaN(race)) {
                             return msgHelper.reply('Invalid choice.');
@@ -133,7 +133,7 @@ module.exports = function (handler) {
 
                             return next(null, races[Number(race)]);
                         });
-                    }
+                    };
 
                     msgHelper.reply('Choose one race :', (err, response) => {
                         if (err) {
@@ -165,7 +165,7 @@ module.exports = function (handler) {
                     });
 
                     context.callback = (msgHelper) => {
-                        let clazz = msgHelper.getEvent().d.content;
+                        let clazz = msgHelper.event.d.content;
 
                         if (isNaN(clazz)) {
                             return msgHelper.reply('Invalid choice.');
@@ -182,7 +182,7 @@ module.exports = function (handler) {
 
                             return next(null, classes[Number(clazz)]);
                         });
-                    }
+                    };
 
                     msgHelper.reply('Choose one class :', (err, response) => {
                         if (err) {
@@ -195,7 +195,7 @@ module.exports = function (handler) {
             },
             sex: (next) => {
                 context.callback = (msgHelper) => {
-                    let sex = msgHelper.getEvent().d.content;
+                    let sex = msgHelper.event.d.content;
 
                     if (isNaN(sex)) {
                         return msgHelper.reply('Invalid choice.');
@@ -212,7 +212,7 @@ module.exports = function (handler) {
 
                         return next(null, sex);
                     });
-                }
+                };
                 
                 msgHelper.reply('Choose your gender :', (err, response) => {
                         if (err) {
@@ -256,4 +256,4 @@ module.exports = function (handler) {
             });
         });
     });
-}
+};

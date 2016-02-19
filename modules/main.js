@@ -3,8 +3,6 @@
 const EventEmitter = require('events');
 const util = require('util');
 
-const MsgHelper = require('../helpers/messages');
-
 function CallbackHandler() {
     EventEmitter.call(this);
     
@@ -30,9 +28,11 @@ require('./game/users')(callbackHandler);
 
 module.exports = function (bot) {
 
+    const MsgHelper = require('../helpers/messages')(bot);
+
     bot.on('message', function (user, userID, channelID, message, rawEvent) {
 
-        let msgHelper = new MsgHelper(bot, rawEvent);
+        let msgHelper = new MsgHelper(rawEvent);
 
         //        let command = message.shift();
         // 
@@ -44,10 +44,10 @@ module.exports = function (bot) {
             return callbackHandler.contexts[userID].callback(msgHelper);
         }
         
-        if (!msgHelper.getCommand()) {
+        if (!msgHelper.command) {
             return;
         }
         
-        callbackHandler.emit(msgHelper.getCommand(), msgHelper);
+        callbackHandler.emit(msgHelper.command, msgHelper);
     });
-}
+};

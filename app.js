@@ -1,7 +1,6 @@
 'use strict';
 
-const DiscordClient = require('discord.io');
-
+const DiscordClient = require('./lib/index');
 
 const winston = require('./helpers/config').winston;
 const jsonfile = require('./helpers/config').jsonfile;
@@ -20,15 +19,11 @@ if (!auth) {
     throw new Error('No authentication object found. Check config.json.')
 }
 
-
-
-
 const bot = new DiscordClient({
     autorun: true,
     email: auth.email,
     password: auth.password
 });
-
 
 bot.on('ready', function () {
     winston.info('Bot started');
@@ -36,16 +31,7 @@ bot.on('ready', function () {
     bot.setPresence({
         game: "Bassu Doroppu"
     });
-
-    // bot.sendMessage({
-    //     to: '139377723574452225',
-    //      message: 'Please give bot back!! :('
-    //  });
-
 });
 
+// main
 require('./modules/main')(bot);
-
-// app.server = http.createServer(app);
-// 
-// app.listen(2101);

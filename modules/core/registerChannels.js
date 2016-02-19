@@ -7,51 +7,46 @@ const allowedPath = './allowed.json';
 module.exports = function (handler) {
 
     handler
-        .on('allowChannel', function (msgHelper) {
+        .on('channel:allow', function (msgHelper) {
             msgHelper.doIfAllowed({ admin: true }, function (err) {
                 if (err) {
                     return console.log(err);
                 }
 
-                if (msgHelper.getParams().length === 1) {
-                    jsonfile.readFile(allowedPath, function (err, allowed) {
-                        allowed.channels.push(msgHelper.getChannelID());
-                        jsonfile.writeFile(allowedPath, allowed, function (err) {
-                            if (err) {
-                                return msgHelper.reply('Could not register the channel.');
-                            }
-                            return msgHelper.reply('Channel registered.');
-                        });
+                jsonfile.readFile(allowedPath, function (err, allowed) {
+                    allowed.channels.push(msgHelper.getChannelID());
+                    jsonfile.writeFile(allowedPath, allowed, function (err) {
+                        if (err) {
+                            return msgHelper.reply('Could not register the channel.');
+                        }
+                        return msgHelper.reply('Channel registered.');
                     });
-                }
+                });
+
             });
         })
-        .on('unallowChannel', function (msgHelper) {
+        .on('channel:unallow', function (msgHelper) {
             msgHelper.doIfAllowed({ admin: true }, function (err) {
                 if (err) {
                     return console.log(err);
                 }
 
+                jsonfile.readFile(allowedPath, function (err, allowed) {
+                    var index = allowed.channels.indexOf(msgHelper.getChannelID());
 
-                if (msgHelper.getParams().length === 1) {
-                    jsonfile.readFile(allowedPath, function (err, allowed) {
-                        var index = allowed.channels.indexOf(msgHelper.getChannelID());
+                    if (index < 0) {
+                        return msgHelper.reply('This channel is not registered.');
+                    }
 
-                        if (index < 0) {
-                            return msgHelper.reply('This channel is not registered.');
+                    allowed.channels.splice(index, 1);
+
+                    jsonfile.writeFile(allowedPath, allowed, function (err) {
+                        if (err) {
+                            return msgHelper.reply('Could not unregister the channel.');
                         }
-
-                        allowed.channels.splice(index, 1);
-
-                        jsonfile.writeFile(allowedPath, allowed, function (err) {
-                            if (err) {
-                                return msgHelper.reply('Could not unregister the channel.');
-                            }
-                            return msgHelper.reply('Channel unregistered.');
-                        });
+                        return msgHelper.reply('Channel unregistered.');
                     });
-                }
+                });
             });
         });
-
-}
+};
