@@ -33,6 +33,10 @@ MessageHelper.prototype.getAuthorID = function () {
     return this.event.d.author.id;
 };
 
+MessageHelper.prototype.getServer = function () {
+    return this.bot.servers[this.bot.serverFromChannel(this.getChannelID())];
+};
+
 MessageHelper.prototype.reply = function (message, callback) {
     if (typeof message === 'object') {
         let prettyMessage = '```\n';
@@ -51,7 +55,7 @@ MessageHelper.prototype.isAllowed = function (options) {
     jsonfile.readFile(allowedPath, (err, allowed) => {
         return (this.isDirectMessage() ||
         (!(options.admin &&
-        this.bot.servers[this.bot.serverFromChannel(this.getChannelID())].owner_id !== this.event.d.author.id &&
+        this.getServerID.owner_id !== this.event.d.author.id &&
         !(allowed.admins.find(a => a === this.event.d.author.id))) &&
         !(options.channel &&
         !(allowed.channels.find(c => c === this.event.d.channel_id)))));
@@ -65,7 +69,7 @@ MessageHelper.prototype.doIfAllowed = function (options, callback)  {
 
     jsonfile.readFile(allowedPath, (err, allowed) => {
         if (options.admin &&
-            this.bot.servers[this.bot.serverFromChannel(this.getChannelID())].owner_id !== this.event.d.author.id &&
+            this.getServer().owner_id !== this.event.d.author.id &&
             !(allowed.admins.find(a => a === this.event.d.author.id))) {
             return callback('User need to be an admin.')
         }

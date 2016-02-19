@@ -10,8 +10,8 @@ winston.level = 'debug';
 winston.add(winston.transports.File, {
     level: 'debug',
     filename: 'logs.json',
-    maxsize: 2048,
-    prettyPrint: true,
+    maxsize: 2048 * 48,
+    prettyPrint: true
 });
 
 // JSONFILE
@@ -26,4 +26,4 @@ jsonfile.spaces = 4;
 module.exports = {
     jsonfile: jsonfile,
     winston: winston
-}
+};

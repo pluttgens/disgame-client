@@ -1,5 +1,6 @@
 'use strict';
 
+const winston = require('../../helpers/config').winston;
 const jsonfile = require('../../helpers/config').jsonfile;
 
 const allowedPath = './allowed.json';
@@ -10,7 +11,7 @@ module.exports = function (handler) {
         .on('channel:allow', function (msgHelper) {
             msgHelper.doIfAllowed({ admin: true }, function (err) {
                 if (err) {
-                    return console.log(err);
+                    return winston.debug(err);
                 }
 
                 jsonfile.readFile(allowedPath, function (err, allowed) {
@@ -28,7 +29,7 @@ module.exports = function (handler) {
         .on('channel:unallow', function (msgHelper) {
             msgHelper.doIfAllowed({ admin: true }, function (err) {
                 if (err) {
-                    return console.log(err);
+                    return winston.debug(err);
                 }
 
                 jsonfile.readFile(allowedPath, function (err, allowed) {
