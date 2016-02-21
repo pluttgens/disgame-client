@@ -66,7 +66,12 @@ module.exports = function (bot) {
             });
         });
 
-        jsonfile.writeFile(allowedPath, allowed, (err) => {
+        let newAllowed = allowed;
+        if (!newAllowed) {
+            newAllowed = {};
+        }
+
+        jsonfile.writeFile(allowedPath, newAllowed, (err) => {
             if (err) {
                 return winston.info(err);
             }

@@ -10,7 +10,7 @@ const help = jsonfile.readFileSync(helpPath);
 
 module.exports = function (handler) {
 
-    handler.on('help', help);
+    handler.on('help', _help);
 
     function _help (msgHelper) {
         if (msgHelper.params.length === 0) {
