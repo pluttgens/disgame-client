@@ -13,7 +13,7 @@ var auth;
 try {
     auth = require('./auth')
 } catch (e) {
-    auth = jsonfile.readFileSnc(configPath).auth;
+    auth = jsonfile.readFileSync(configPath).auth;
 }
 
 if (!auth) {
