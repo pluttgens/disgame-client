@@ -188,4 +188,21 @@ MessageBuffer.prototype._unsendMessages = function (messages) {
     messages.forEach(message => message.sent = false);
 };
 
-module.exports = MessageBuffer;
+var messageBuffer;
+
+module.exports = {
+    construct: (bot) => {
+        if (messageBuffer) {
+            throw new Error('MessageBuffer is already constructed');
+        }
+
+        messageBuffer = new MessageBuffer(bot);
+    },
+    get: () => {
+        if (!messageBuffer) {
+            throw new Error('MessageBuffer not constructed yet');
+        }
+
+        return messageBuffer;
+    }
+};

@@ -1,36 +1,27 @@
 'use strict';
 
-const EventEmitter = require('events');
-const util = require('util');
-
-function CallbackHandler(bot) {
-    EventEmitter.call(this);
-
-    this.bot = bot;
-    this.contexts = {};
-}
-
-util.inherits(CallbackHandler, EventEmitter);
+const Handler = require('../helpers/handler');
 
 module.exports = function (bot) {
 
-    const callbackHandler = new CallbackHandler(bot);
+    const handler = new Handler(bot);
 
-    //helpers
-    require('../helpers/context').construct(callbackHandler);
+    //boot
+    require('./boot/boot')(bot);
 
     // core
-    require('./core/help')(callbackHandler);
-    require('./core/channels')(callbackHandler);
-    require('./core/server')(callbackHandler);
-    require('./core/cancel')(callbackHandler);
+    require('./core/help')(handler);
+    require('./core/channels')(handler);
+    require('./core/server')(handler);
+    require('./core/cancel')(handler);
 
     // ping
-    require('./ping/ping')(callbackHandler);
+    require('./ping/ping')(handler);
 
     //game
-    require('./game/game')(callbackHandler);
+    require('./game/game')(handler);
 
+    require('../helpers/messageBuffer').construct(bot);
     const MsgHelper = require('../helpers/messages')(bot);
 
     bot.on('message', function (user, userID, channelID, message, rawEvent) {
@@ -43,14 +34,14 @@ module.exports = function (bot) {
         //             directMessageCallbacks[command].forEach(c => c.call(bot));
         //         }
 
-        if (callbackHandler.contexts[userID] && callbackHandler.contexts[userID].callback) {
-            return callbackHandler.contexts[userID].callback(msgHelper);
+        if (handler.get[userID] && handler.get[userID].callback) {
+            return handler.get[userID].callback(msgHelper);
         }
 
         if (!msgHelper.command) {
             return;
         }
 
-        callbackHandler.emit(msgHelper.command, msgHelper);
+        handler.emit(msgHelper.command, msgHelper);
     });
 };

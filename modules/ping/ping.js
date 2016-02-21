@@ -1,6 +1,6 @@
 'use strict';
 
-const winston = require('../../helpers/config').winston;
+const winston = require('winston');
 
 module.exports = function (handler) {
 
@@ -8,7 +8,7 @@ module.exports = function (handler) {
         .on('ping', function (msgHelper) {
             msgHelper.doIfAllowed({ channel: true }, function (err) {
                 if (err) {
-                    return winston.debug(err);
+                    return winston.info(err);
                 }
                 msgHelper.reply('pong');
             });
@@ -16,7 +16,7 @@ module.exports = function (handler) {
         .on('pingping', function (msgHelper) {
             msgHelper.doIfAllowed({ channel: true }, function (err) {
                 if (err) {
-                    return winston.debug(err);
+                    return winston.info(err);
                 }
                 msgHelper.reply('pong');
                 msgHelper.reply('pong');

@@ -1,5 +1,6 @@
 'use strict';
 
+const winston = require('winston');
 const jsonfile = require('jsonfile');
 const util = require('util');
 
@@ -88,6 +89,7 @@ MessageHelper.prototype.isDirectMessage = function() {
 };
 
 MessageHelper.prototype.error = function (err) {
+    winston.info(err);
     if (err.code === 'ECONNREFUSED') {
         return this.reply('Could not connect to the server.');
     }
@@ -96,6 +98,6 @@ MessageHelper.prototype.error = function (err) {
 
 module.exports = function (bot) {
     MessageHelper.prototype.bot = bot;
-    MessageHelper.prototype.buffer = new MessageBuffer(bot);
+    MessageHelper.prototype.buffer = MessageBuffer.get();
     return MessageHelper;
 };

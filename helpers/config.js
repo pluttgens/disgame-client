@@ -23,13 +23,3 @@ winston.add(winston.transports.File, {
     maxsize: 2048 * 48,
     prettyPrint: true
 });
-
-
-
-
-////////////////////////////////////////////////////////////////
-
-module.exports = {
-    jsonfile: jsonfile,
-    winston: winston
-};

@@ -1,6 +1,6 @@
 'use strict';
 
-const jsonfile = require('../../helpers/config').jsonfile;
+const jsonfile = require('jsonfile');
 
 const configPath = './config.json';
 const helpPath = __dirname + '/help.json';

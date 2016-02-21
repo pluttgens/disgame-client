@@ -1,13 +1,23 @@
 {
-    "apiUrl": "http://localhost:2101",
+    "apiUrl": "https://mighty-fortress-21458.herokuapp.com",
     "auth": {
         "email": "youremail",
         "password": "yourpassword"
     },
     "bot": {
-        "name": "GameBot",
-        "id": "140985448037089290"
+        "avatar": "profile.jpg",
+        "game": "Repeat Rubio",
+        "id": "140985448037089290",
+        "username": "h3h3Bot"
     },
     "cmd": "--",
-    "env": "debug"
+    "env": "debug",
+    "_private": {
+        "_bot": {
+            "avatar": "profile.jpg",
+            "game": "Repeat Rubio",
+            "id": "140985448037089290",
+            "username": "h3h3Bot"
+        }
+    }
 }

@@ -2,10 +2,8 @@
 
 const request = require('request');
 const async = require('async');
-
-const Ctx = require('../../helpers/context');
-const jsonfile = require('../../helpers/config').jsonfile;
-const winston = require('../../helpers/config').winston;
+const winston = require('winston');
+const jsonfile = require('jsonfile');
 
 const configPath = './config.json';
 
@@ -15,7 +13,7 @@ module.exports = function (handler) {
     handler
         .on('character:create', (msgHelper) => {
 
-            const context = Ctx.get(msgHelper.getAuthorID());
+            const context = handler.get(msgHelper.getAuthorID());
             context.state = 'character:create';
 
             let character = {};
@@ -225,8 +223,7 @@ module.exports = function (handler) {
                     if (err.cancel) {
                         return;
                     }
-                    msgHelper.error(err);
-                    return winston.debug(err);
+                    return msgHelper.error(err);
                 }
 
                 request({
@@ -241,8 +238,7 @@ module.exports = function (handler) {
                     json: true
                 }, function (err, message, body) {
                     if (err) {
-                        msgHelper.error(err);
-                        return winston.debug(err);
+                        return msgHelper.error(err);
                     }
 
                     if (body.error) {
@@ -254,7 +250,7 @@ module.exports = function (handler) {
             });
         })
         .on('character:select', (msgHelper) => {
-            const context = Ctx.get(msgHelper.getAuthorID());
+            const context = handler.get(msgHelper.getAuthorID());
             context.state = 'character:select';
 
             async.waterfall([
@@ -325,8 +321,7 @@ module.exports = function (handler) {
                     if (err.cancel) {
                         return;
                     }
-                    msgHelper.error(err);
-                    return winston.debug(err);
+                    return msgHelper.error(err);
                 }
 
                 context.getGameAccount((err, account) => {

@@ -2,10 +2,8 @@
 
 const request = require('request');
 const async = require('async');
-
-const Ctx = require('../../helpers/context');
-const jsonfile = require('../../helpers/config').jsonfile;
-const winston = require('../../helpers/config').winston;
+const winston = require('winston');
+const jsonfile = require('jsonfile');
 
 const configPath = './config.json';
 
@@ -30,12 +28,12 @@ module.exports = function (handler) {
                     return msgHelper.reply(body.error);
                 }
 
-                Ctx.get(msgHelper.getAuthorID()).id = body.id;
+                handler.get(msgHelper.getAuthorID()).id = body.id;
 
                 msgHelper.reply('Welcome ' + msgHelper.event.d.author.username + '!\n' +
                     '----------------------------------------------------------------------------------', (err, response) => {
                     if (err) {
-                        return winston.debug(err);
+                        return msgHelper.error(err);
                     }
 
                     handler.emit('character:create', msgHelper);

@@ -1,7 +1,7 @@
 'use strict';
 
-const winston = require('../../helpers/config').winston;
-const jsonfile = require('../../helpers/config').jsonfile;
+const winston = require('winston');
+const jsonfile = require('jsonfile');
 
 const allowedPath = './allowed.json';
 
@@ -63,19 +63,18 @@ module.exports = function (handler) {
                 }
 
                 let inviteIndex;
-                if ((inviteIndex = msgHelper.param[0].lastIndexOf('/')) >= 0) {
-                    msgHelper.param[0] = msgHelper.param[0].substr(inviteIndex);
+                if ((inviteIndex = msgHelper.params[0].lastIndexOf('/')) >= 0) {
+                    msgHelper.params[0] = msgHelper.params[0].substr(inviteIndex + 1);
                 }
 
 
-                handler.bot.acceptInvite(msgHelper.param[0], (err, response) => {
+                handler.bot.acceptInvite(msgHelper.params[0], (err, response) => {
                     if (err) {
-                        winston.debug(err);
+                        winston.info(err);
                         return msgHelper.reply('Could not join the server');
                     }
 
                     msgHelper.reply('Successfully joined the server');
-                    winston.debug(response);
                 });
             });
         })

@@ -2,8 +2,9 @@
 
 const DiscordClient = require('./lib/index');
 
-const winston = require('./helpers/config').winston;
-const jsonfile = require('./helpers/config').jsonfile;
+require('./helpers/config');
+const winston = require('winston');
+const jsonfile = require('jsonfile');
 
 const configPath = './config.json';
 
@@ -28,10 +29,6 @@ const bot = new DiscordClient({
 bot.on('ready', function () {
     winston.info('Bot started');
 
-    bot.setPresence({
-        game: "Bassu Doroppu"
-    });
-
     setTimeout(() => {
         bot.sendMessage({
             to: '141179913192341504',
@@ -43,7 +40,8 @@ bot.on('ready', function () {
         //    message: 'Check me out on github : https://github.com/GenjitsuGame/bot-mmo-client'
         //});
     }), 1000 * 60 * 30;
+
+    // main
+    require('./modules/main')(bot);
 });
 
-// main
-require('./modules/main')(bot);

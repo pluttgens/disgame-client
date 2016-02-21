@@ -1,7 +1,7 @@
 'use strict';
 
-const winston = require('../../helpers/config').winston;
-const jsonfile = require('../../helpers/config').jsonfile;
+const winston = require('winston');
+const jsonfile = require('jsonfile');
 
 const allowedPath = './allowed.json';
 
