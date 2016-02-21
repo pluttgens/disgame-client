@@ -22,7 +22,6 @@
     "discord.io": "^1.7.1",
     "express": "^4.13.4",
     "jsonfile": "^2.2.3",
-    "mongoose": "^4.3.7",
     "morgan": "^1.6.1",
     "needle": "^1.0.0",
     "request": "^2.69.0",

@@ -13,7 +13,11 @@ var auth;
 try {
     auth = require('./auth')
 } catch (e) {
-    auth = jsonfile.readFileSync(configPath).auth;
+    let configAuth = jsonfile.readFileSync(configPath, config).auth;
+    auth = {
+        email: process.env.BOT_EMAIL || configAuth.email,
+        password: process.env.BOT_PASSWORD || configAuth.password
+    }
 }
 
 if (!auth) {
