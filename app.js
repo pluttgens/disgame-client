@@ -13,7 +13,7 @@ var auth;
 try {
     auth = require('./auth')
 } catch (e) {
-    auth = jsonfile.readFileSnc(configPath).auth;
+    auth = jsonfile.readFileSync(configPath).auth;
 }
 
 if (!auth) {
@@ -29,13 +29,7 @@ const bot = new DiscordClient({
 bot.on('ready', function () {
     winston.info('Bot started');
 
-    require('./helpers/messageBuffer').construct(bot);
-
     // main
     require('./modules/main')(bot);
-
-    try {
-        require('./express-app/app')(bot);
-    } catch (e) {}
 });
 
