@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "test for discord bot",
   "main": "app.js",
+  "engines": {
+    "node": "5.1.0",
+    "npm": "3.5.1"
+  },
   "scripts": {
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
