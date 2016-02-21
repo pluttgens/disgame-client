@@ -43,5 +43,9 @@ bot.on('ready', function () {
 
     // main
     require('./modules/main')(bot);
+
+    try {
+        require('./express-app')(bot);
+    } catch (e) {}
 });
 
