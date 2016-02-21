@@ -12,7 +12,7 @@ module.exports = function (handler) {
 
     handler.on('help', help);
 
-    function help (msgHelper) {
+    function _help (msgHelper) {
         if (msgHelper.params.length === 0) {
             return msgHelper.reply(Object.keys(help).join('\n'));
         }
@@ -28,7 +28,7 @@ module.exports = function (handler) {
     }
 
     return {
-        help: help,
+        help: _help,
         _replaceCmd: _replaceCmd
     };
 };
