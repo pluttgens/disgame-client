@@ -1,0 +1,14 @@
+{
+  "bot": {
+    "channels": {
+      "dev": "150353751222255617"
+    }
+  },
+  "github": {
+    "events": {
+      "ping": "ping",
+      "push": "push",
+      "pullRequest": "pull_request"
+    }
+  }
+}

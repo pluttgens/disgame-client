@@ -39,13 +39,15 @@ bot.on('ready', function () {
         //    to: '150019318262792192',
         //    message: 'Check me out on github : https://github.com/GenjitsuGame/bot-mmo-client'
         //});
-    }), 1000 * 60 * 30;
+    }, 1000 * 60 * 30);
+
+    require('./helpers/messageBuffer').construct(bot);
 
     // main
     require('./modules/main')(bot);
 
     try {
-        require('./express-app')(bot);
+        require('./express-app/app')(bot);
     } catch (e) {}
 });
 

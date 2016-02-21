@@ -20,7 +20,7 @@ Message.prototype._id = 0;
 Message.prototype._CONTENT_MAX_LENGTH = 2000;
 
 Message.prototype.addMention = function () {
-    if (this._hasMention()) {
+    if (!this.user && this._hasMention()) {
         return;
     }
 

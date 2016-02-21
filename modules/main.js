@@ -21,7 +21,6 @@ module.exports = function (bot) {
     //game
     require('./game/game')(handler);
 
-    require('../helpers/messageBuffer').construct(bot);
     const MsgHelper = require('../helpers/messages')(bot);
 
     bot.on('message', function (user, userID, channelID, message, rawEvent) {
