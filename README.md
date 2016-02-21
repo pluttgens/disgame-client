@@ -79,7 +79,7 @@ module.exports = function (handler) {
 
 (main.js)
 ```
-require('./ping')(callbackHandler);
+require('./ping')(handler);
 ```
 
 
