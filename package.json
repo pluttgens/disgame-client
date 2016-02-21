@@ -19,5 +19,10 @@
     "request": "^2.69.0",
     "winston": "^2.1.1",
     "ws": "^0.8.0"
+  },
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "should": "^8.2.2",
+    "supertest": "^1.2.0"
   }
 }

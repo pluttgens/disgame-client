@@ -1,0 +1,17 @@
+'use strict';
+
+const should = require('should');
+const HandlerMock = require('../../mocks/HandlerMock');
+const MessageHelperMock = require('../../mocks/MessageHelperMock');
+const Ping = require('../../../modules/ping/ping')(new HandlerMock());
+
+describe('ping/ping unit test', function() {
+
+    it('should return pong', function(done) {
+        Ping.ping(new MessageHelperMock((message) => {
+            should.equal(message, 'pong');
+            done();
+        }));
+    });
+
+});
