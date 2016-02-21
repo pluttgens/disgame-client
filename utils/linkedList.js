@@ -5,14 +5,11 @@ const Node = require('./node');
 function LinkedList() {
     this._first = null;
     this._last = null;
-    this.length = 0;
 }
 
 LinkedList.prototype.add = function (e) {
-    ++this.length;
-
     if (!this._first) {
-        return this._first = this._last = new Node(e, null);
+        return this._first = this._last = new Node(e);
     }
 
     return this._last = this._last.next = new Node(e, this._last);
@@ -99,8 +96,6 @@ LinkedList.prototype.remove = function (e) {
     if (!elem) {
         return;
     }
-
-    --this.length;
 
     if (elem.isLast() && elem.isFirst()) {
         this._first = this._last = null;

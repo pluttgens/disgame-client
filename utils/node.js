@@ -1,9 +1,17 @@
 'use strict';
 
-function Node(elem, prev) {
+function Node(elem, prev, next) {
     this.prev = prev;
-    this.next = null;
+    this.next = next;
     this.elem = elem;
+
+    if (prev) {
+        prev.next = this;
+    }
+
+    if (next) {
+        next.prev = this;
+    }
 }
 
 Node.prototype.isFirst = function () {

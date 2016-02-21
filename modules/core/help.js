@@ -10,19 +10,25 @@ const help = jsonfile.readFileSync(helpPath);
 
 module.exports = function (handler) {
 
-    handler.on('help', function (msgHelper) {
+    handler.on('help', help);
+
+    function help (msgHelper) {
         if (msgHelper.params.length === 0) {
             return msgHelper.reply(Object.keys(help).join('\n'));
         }
 
         var reply = help[msgHelper.params[0]];
 
-        return msgHelper.reply(reply ? replaceCmd(reply) : 'Unknown command : ' + msgHelper.params[0]);
+        return msgHelper.reply(reply ? _replaceCmd(reply) : 'Unknown command : ' + msgHelper.params[0]);
 
-        function replaceCmd(reply) {
-            return reply.replace('%cmd%', config.cmd)
-        }
-    });
+    }
 
+    function _replaceCmd(reply) {
+        return reply.replace('%cmd%', config.cmd)
+    }
 
+    return {
+        help: help,
+        _replaceCmd: _replaceCmd
+    };
 };

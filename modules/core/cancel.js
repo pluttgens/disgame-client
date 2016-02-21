@@ -2,7 +2,13 @@
 
 module.exports = function (handler) {
     handler
-        .on('cancel', (msgHelper) => {
-            msgHelper.reply('Nothing to cancel');
-        });
+        .on('cancel', cancel);
+
+    function cancel (msgHelper)  {
+        msgHelper.reply('Nothing to cancel');
+    }
+
+    return {
+        cancel: cancel
+    };
 };

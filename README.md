@@ -10,11 +10,11 @@ An api will be made available through a key and a secret. Pulling data will be a
 Installation :
 -------------
 
- - npm
+ - npm (3.5.1)
  ```
  npm install
  ```
- - node
+ - node (5.1.0)
  ```
  node app.js
  ```
@@ -135,7 +135,9 @@ Implementations improvement are welcome as long as they do not break everything 
 
 The features that needs to be worked on are the following :
 
-*coming soon*
+> Refactor the existing modules to return their functions so they can be tested.
+> Write new tests for modules or improve already existing ones. (Except those from the `game folder` since they might change really soon.
+> *coming soon*
 
 Running :
 -------------
@@ -145,4 +147,4 @@ Running :
 Tests :
 -------------
 
-*coming soon*
+`mocha tests`
