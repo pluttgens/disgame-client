@@ -27,14 +27,8 @@ module.exports = function (bot) {
 
         let msgHelper = new MsgHelper(rawEvent);
 
-        //        let command = message.shift();
-        // 
-        //         if (msgHelper.isDirectMessage) {
-        //             directMessageCallbacks[command].forEach(c => c.call(bot));
-        //         }
-
-        if (handler.get[userID] && handler.get[userID].callback) {
-            return handler.get[userID].callback(msgHelper);
+        if (handler.get(userID) && handler.get(userID).callback) {
+            return handler.get(userID).callback(msgHelper);
         }
 
         if (!msgHelper.command) {
