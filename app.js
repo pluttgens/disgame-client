@@ -2,7 +2,7 @@
 
 const DiscordClient = require('./lib/index');
 
-require('./helpers/config');
+require('./helpers/config')();
 const winston = require('winston');
 const jsonfile = require('jsonfile');
 
