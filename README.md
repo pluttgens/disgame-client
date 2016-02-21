@@ -32,7 +32,9 @@ check help.json.
 Useful links :
 -------------
 [discord-io](https://github.com/izy521/discord.io/wiki/)
+
 [discord unoffical API doc](http://unofficial.discordapi.com/en/latest/)
+
 [discord event structure](http://hornwitser.no/discord/analysis)
 
 [Join the (unofficial) discord library dev server](https://discord.gg/0SBTUU1wZTVyGXpr)
@@ -41,14 +43,7 @@ Useful links :
 Architecture :
 -------------
 
-```flow
-disC=>start: Discord Client
-disS=>operation: Discord Server
-bot=>operation: Bot (Game client)
-gameS=>end: Game Server
-
-disC->disS->bot->gameS
-```
+![](http://puu.sh/nfGYJ/e31d0992e4.png)
 
 This is a simplified schema of the architecture of the project. This repository is the bot.
 
