@@ -33,6 +33,8 @@ const bot = new DiscordClient({
 bot.on('ready', function () {
     winston.info('Bot started');
 
+    require('./helpers/messageBuffer').construct(bot);
+
     // main
     require('./modules/main')(bot);
 });
