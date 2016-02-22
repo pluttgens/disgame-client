@@ -5,6 +5,7 @@ module.exports = function (bot) {
     const express = require('express');
     const router = express.Router();
     const jsonfile = require('jsonfile');
+    const winston = require('winston');
 
     const messageBuffer = require('../../helpers/messageBuffer').get();
 
