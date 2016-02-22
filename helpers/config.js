@@ -28,7 +28,7 @@ module.exports = function () {
             prettyPrint: true
         });
     } else {
-        winston.level = 'error';
+        winston.level = 'info';
     }
 
 };

@@ -11,6 +11,8 @@ module.exports = function (bot) {
     router
         .post('/', (req, res) => {
             let event = req.headers['X-Github-Event'];
+            winston.info('X-Github-Event', event);
+
             jsonfile.readFile(req.app.locals.config, (err, config) => {
                 if (err) {
                     return winston.info(err);
