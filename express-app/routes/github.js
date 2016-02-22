@@ -1,11 +1,12 @@
 'use strict';
-const express = require('express');
-const router = express.Router();
-const jsonfile = require('jsonfile');
-
-const messageBuffer = require('../../helpers/messageBuffer').get();
 
 module.exports = function (bot) {
+
+    const express = require('express');
+    const router = express.Router();
+    const jsonfile = require('jsonfile');
+
+    const messageBuffer = require('../../helpers/messageBuffer').get();
 
     router
         .post('/', (req, res) => {

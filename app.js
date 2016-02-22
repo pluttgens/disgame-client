@@ -37,5 +37,8 @@ bot.on('ready', function () {
 
     // main
     require('./modules/main')(bot);
+
+    //express-app
+    require('./express-app/app')(bot);
 });
 
