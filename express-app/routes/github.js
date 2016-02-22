@@ -12,7 +12,7 @@ module.exports = function (bot) {
     router
         .post('/', (req, res) => {
             let event = req.get('X-GitHub-Event');
-            winston.info('X-GitHub-Event', event);
+            winston.info('X-GitHub-Event : ' + event);
 
             jsonfile.readFile(req.app.locals.config, (err, config) => {
                 if (err) {
