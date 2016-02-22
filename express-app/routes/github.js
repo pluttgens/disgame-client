@@ -30,7 +30,7 @@ module.exports = function (bot) {
                 if (event === config.github.events.push) {
                     let message = '**' + req.body.repository.full_name + '** [' + req.body.pusher.name + ',<' + req.body.pusher.email + '>]';
                     req.body.commits.forEach(commit => {
-                        message += '\n`' + commit.id + '` ' + commit.message + ' [' + commit.comitter.username + ',<' + commit.comitter.email + '>]';
+                        message += '\n`' + commit.id + '` ' + commit.message + ' [' + commit.committer.username + ',<' + commit.committer.email + '>]';
                     });
 
                     if (message.length > 2000) {
