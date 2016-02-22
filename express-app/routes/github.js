@@ -11,8 +11,8 @@ module.exports = function (bot) {
 
     router
         .post('/', (req, res) => {
-            let event = req.headers['X-Github-Event'];
-            winston.info('X-Github-Event', event);
+            let event = req.headers['X-GitHub-Event'];
+            winston.info('X-GitHub-Event', event);
 
             jsonfile.readFile(req.app.locals.config, (err, config) => {
                 if (err) {
@@ -24,7 +24,7 @@ module.exports = function (bot) {
                 }
 
                 if (event === config.github.events.ping) {
-                    messageBuffer.write(config.bot.channels.dev, null, 'Github webservice successfully hooked!');
+                    messageBuffer.write(config.bot.channels.dev, null, 'GitHub webservice successfully hooked!');
                 }
 
                 if (event === config.github.events.push) {
