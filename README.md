@@ -10,15 +10,9 @@ An api will be made available through a key and a secret. Pulling data will be a
 Installation :
 -------------
 
- - npm (3.5.1)
- ```
- npm install
- ```
- - node (5.1.0)
- ```
- node app.js
- ```
-
+ - npm (3.7.3) `npm install`
+ - node (5.7.0) `npm start`
+ 
 Configuration :
 -------------
 
@@ -38,6 +32,8 @@ Useful links :
 [discord event structure](http://hornwitser.no/discord/analysis)
 
 [Join the (unofficial) discord library dev server](https://discord.gg/0SBTUU1wZTVyGXpr)
+
+[DiscordMMO game server apidoc](http://mighty-fortress-21458.herokuapp.com/apidoc)
 
 
 Architecture :
@@ -137,17 +133,13 @@ The features that needs to be worked on are the following :
 
 > Refactor the existing modules to return their functions so they can be tested.
 > Write new tests for modules or improve already existing ones. (Except those from the `game folder` since they might change really soon.
+> Write a wrapper librairy for the game server API.
 > *coming soon*
-
-Running :
--------------
-
-*coming soon*
 
 Tests :
 -------------
 
-`mocha tests`
+`npm test`
 
 License :
 -------------
