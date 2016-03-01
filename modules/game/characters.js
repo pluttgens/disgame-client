@@ -1,9 +1,9 @@
 'use strict';
 
-const request = require('request');
-const async = require('async');
 const winston = require('winston');
 const jsonfile = require('jsonfile');
+const disgame = require('disgame-api');
+const Promise = require('bluebird');
 
 const configPath = './config.json';
 
@@ -11,322 +11,144 @@ const config = jsonfile.readFileSync(configPath);
 
 module.exports = function (handler) {
     handler
-        .on('character:create', (msgHelper) => {
+        .on('character:create', characterCreate)
+        .on('character:select', characterSelect);
 
-            const context = handler.get(msgHelper.getAuthorID());
-            context.state = 'character:create';
-
-            let character = {};
-
-            async.series({
-                user: (next) => {
-                    context.getGameAccount((err, account) => {
-                        if (err) {
-                            return next(err);
-                        }
-
-                        console.log(account);
-                        if(!account) {
-                            return next(msgHelper.event.d.author.username + ' is not registered.\n' +
-                                'Type "--user:register" to create an account and start playing');
-                        }
-
-                        msgHelper.reply(msgHelper.event.d.author.username + ', create your character!', (err, response) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            next(null, account.id);
-                        });
-                    });
-                },
-                name: (next) => {
-                    context.setCallback((err, msgHelper) => {
-                        if (err) {
-                            return next(err);
-                        }
-
-                        let name = msgHelper.event.d.content;
-
-                        request({
-                            url: config.apiUrl + '/characters/',
-                            method: 'GET',
-                            qs: {
-                                name: name
-                            },
-                            json: true
-                        }, function (err, message, body) {
-                            if (err) {
-                                return msgHelper.error(err);
-                            }
-
-                            if (!body.error) {
-                                return msgHelper.reply('Name already taken');
-                            }
-
-                            character.name = name;
-
-                            return msgHelper.reply('Name available.', (err, response) => {
-                                if (err) {
-                                    return msgHelper.error(err);
-                                }
-
-                                return next(null, name);
-                            });
-
-                        });
-                    });
-                    msgHelper.reply('Enter character name :');
-                },
-                race: (next) => {
-                    request({
-                        url: config.apiUrl + '/races/',
-                        method: 'GET',
-                        json: true
-                    }, function (err, message, body) {
-                        if (err) {
-                            return winston.debug(err);
-                        }
-
-                        if (body.error) {
-                            return msgHelper.reply(body.error);
-                        }
-
-                        let races = {};
-
-                        body.races.forEach((race, i) => {
-                            races[i] = race.name;
-                        });
-
-                        context.setCallback((err, msgHelper) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            let race = msgHelper.event.d.content;
-
-                            if (isNaN(race)) {
-                                return msgHelper.reply('Invalid choice.');
-                            }
-
-                            if (!races[race]) {
-                                return msgHelper.reply('Invalid choice.');
-                            }
-
-                            return msgHelper.reply('Race chosen', (err, response) => {
-                                if (err) {
-                                    return winston.debug(err);
-                                }
-
-                                return next(null, body.races[Number(race)]._id);
-                            });
-                        });
-
-                        msgHelper.reply('Choose one race :', (err, response) => {
-                            if (err) {
-                                return winston.debug(err);
-                            }
-
-                            msgHelper.reply(races);
-                        });
-                    });
-                },
-                class: (next) => {
-                    request({
-                        url: config.apiUrl + '/classes/',
-                        method: 'GET',
-                        json: true
-                    }, function (err, message, body) {
-                        if (err) {
-                            return winston.debug(err);
-                        }
-
-                        if (body.error) {
-                            return msgHelper.reply(body.error);
-                        }
-
-                        let classes = {};
-
-                        body.classes.forEach((clazz, i) => {
-                            classes[i] = clazz.name;
-                        });
-
-                        context.setCallback((err, msgHelper) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            let clazz = msgHelper.event.d.content;
-
-                            if (isNaN(clazz)) {
-                                return msgHelper.reply('Invalid choice.');
-                            }
-
-                            if (!classes[clazz]) {
-                                return msgHelper.reply('Invalid choice.');
-                            }
-
-                            return msgHelper.reply('Class chosen', (err, response) => {
-                                if (err) {
-                                    return next(err);
-                                }
-
-                                return next(null, body.classes[Number(clazz)]._id);
-                            });
-                        });
-
-                        msgHelper.reply('Choose one class :', (err, response) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                           return msgHelper.reply(classes);
-                        });
-                    });
-                },
-                sex: (next) => {
-                    context.setCallback((err, msgHelper) => {
-                        if (err) {
-                            return next(err);
-                        }
-
-                        let sex = msgHelper.event.d.content;
-
-                        if (sex !== '0' && sex !== '1') {
-                            return msgHelper.reply('Invalid choice.');
-                        }
-
-                        return msgHelper.reply('Sex chosen', (err, response) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            return next(null, sex);
-                        });
-                    });
-
-                    msgHelper.reply('Choose your gender :', (err, response) => {
-                        if (err) {
-                            return next(err);
-                        }
-
-                        msgHelper.reply({
-                            0: 'Male',
-                            1: 'Female'
-                        });
-                    });
-                }
-            }, (err, results) => {
-                context.callback = null;
-
-                if (err) {
-                    if (err.cancel) {
-                        return;
-                    }
-                    return msgHelper.error(err);
-                }
-
-                request({
-                    url: config.apiUrl +  '/users/' + results.user + '/characters',
-                    method: 'POST',
-                    body: {
-                        name: results.name,
-                        race: results.race,
-                        class: results.class,
-                        sex: results.sex ? 'f' : 'm'
-                    },
-                    json: true
-                }, function (err, message, body) {
-                    if (err) {
-                        return msgHelper.error(err);
-                    }
-
-                    if (body.error) {
-                        return msgHelper.reply(body.error);
-                    }
-
-                    return msgHelper.reply('Character successfully created!');
-                });
-            });
-        })
-        .on('character:select', (msgHelper) => {
-            const context = handler.get(msgHelper.getAuthorID());
-            context.state = 'character:select';
-
-            async.waterfall([
-                (next) => {
-                    context.getGameAccount((err, account) => {
-                        if (err) {
-                            return next(err);
-                        }
-
-                        return next(null, account.id)
-                    });
-                }, (user, next) => {
-                    request({
-                        url: config.apiUrl + '/users/' + user + '/characters',
-                        method: 'GET',
-                        json: true
-                    }, (err, response, body) => {
-                        if (err) {
-                            return winston.debug(err);
-                        }
-
-                        if (body.error) {
-                            return msgHelper.reply(body.error);
-                        }
-
-                        let characters = {};
-                        body.characters.forEach((character, i) => {
-                            characters[i] = 'Name  : ' + character.name + '\n';
-                            characters[i] += '    Race  : ' + character.class.name + '\n';
-                            characters[i] += '    Class : ' + character.race.name + '\n';
-                            characters[i] += '    Sex   : ' + (character.sex ? 'Female' : 'Male') + '\n';
-                            characters[i] += '    Level : ' + character.level + '\n';
-                        });
-
-                        context.setCallback((err, msgHelper) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            let character = msgHelper.event.d.content;
-
-                            if (!characters[character]) {
-                                return msgHelper.reply('Invalid choice.');
-                            }
-
-                            return msgHelper.reply('Playing on : ' + body.characters[character].name, (err, response) => {
-                                if (err) {
-                                    return next(err);
-                                }
-
-                                return next(null, body.characters[character]);
-                            });
-                        });
-
-                        msgHelper.reply('Select a character :', (err, response) => {
-                            if (err) {
-                                return next(err);
-                            }
-
-                            return msgHelper.reply(characters);
-                        })
+    function characterCreate(msgHelper) {
+        const ctx = handler.get(msgHelper.getAuthorID());
+        ctx.state = 'character:create';
+        Promise
+            .resolve(msgHelper.params)
+            .then(params => {
+                if (params.length > 0) return params;
+                return msgHelper
+                    .reply('Create your character!')
+                    .then(() => {
+                        return Promise.mapSeries([
+                            characterCreateName,
+                            characterCreateRace,
+                            characterCreateClass,
+                            characterCreateSex
+                        ], promise => promise.call(ctx, msgHelper))
                     })
-                }
-            ], (err, character) => {
-                context.callback = null;
-
-                if (err) {
-                    if (err.cancel) {
-                        return;
-                    }
-                    return msgHelper.error(err);
-                }
-
-                context.getGameAccount((err, account) => {
-                    account.character = character;
-                })
+            })
+            .spread((name, race, clazz, sex) => {
+                disgame
+                    .createCharacter(msgHelper.getAuthorID(), {
+                        name: name,
+                        race: race,
+                        class: clazz,
+                        sex: sex
+                    })
+                    .then(() => msgHelper.reply('Character successfully created.'))
+                    .then(() => handler.emit('character:select', msgHelper.getClean()))
+                    .catch(err => msgHelper.reply(err));
             });
+    }
+
+    function characterCreateName(msgHelper) {
+        const defer = this.setCallback((msgHelper, resolve) => {
+            let name = msgHelper.event.d.content;
+            disgame.getCharacters({name: name})
+                .then(characters => {
+                    if (characters.length > 0) return msgHelper.reply('Name already taken');
+                    return msgHelper.reply('Name available').then(() => resolve(name));
+                });
         });
+        msgHelper.reply('Enter character name :');
+        return defer;
+    }
+    function characterCreateRace(msgHelper) {
+        return disgame.getRaces()
+            .map(race => race.name)
+            .then(races => {
+                const defer = this.setCallback((msgHelper, resolve) => {
+                    let race = msgHelper.event.d.content;
+                    if (!races[race]) return msgHelper.reply('Invalid choice.');
+                    resolve(races[race]);
+                });
+                msgHelper.reply('Choose a race :')
+                    .then(() => msgHelper.reply(races));
+                return defer;
+            });
+    }
+    function characterCreateClass(msgHelper) {
+        return disgame.getClasses()
+            .map(clazz => clazz.name)
+            .then(classes => {
+                const defer = this.setCallback((msgHelper, resolve) => {
+                    let clazz = msgHelper.event.d.content;
+                    if (!classes[clazz]) return msgHelper.reply('Invalid choice.');
+                    resolve(classes[clazz]);
+                });
+                msgHelper.reply('Choose a class :')
+                    .then(() => msgHelper.reply(classes));
+                return defer;
+            });
+    }
+    function characterCreateSex(msgHelper) {
+        return Promise.resolve(['Male', 'Female'])
+            .then(sexes => {
+                const defer = this.setCallback((msgHelper, resolve) => {
+                    let sex = msgHelper.event.d.content;
+                    if (!sexes[sex]) return msgHelper.reply('Invalid choice.');
+                    resolve(sexes[sex].charAt(0));
+                });
+                msgHelper
+                    .reply('Choose your sex :')
+                    .then(() => msgHelper.reply(sexes));
+                return defer;
+            });
+    }
+    function characterSelect(msgHelper) {
+        const ctx = handler.get(msgHelper.getAuthorID());
+        ctx.state = 'character:select';
+        return disgame
+            .getUserCharacters(msgHelper.getAuthorID())
+            .then(characters => {
+                return Promise
+                    .map(characters, (character => {
+                        return {
+                            Name: character.name,
+                            Race: character.race.name,
+                            Class: character.class.name,
+                            Sex: character.sex === 'M' ? 'Male' : 'Female',
+                            Level: character.level
+                        };
+                    }))
+                    .then(mappedCharacters => {
+                        const defer = ctx.setCallback((msgHelper, resolve) => {
+                            let character = msgHelper.event.d.content;
+                            if(!characters[character]) return msgHelper.reply('Invalid choice.');
+                            resolve(characters[character]);
+                        });
+                        msgHelper
+                            .reply('Choose your character.')
+                            .then(() => {
+                                return msgHelper.reply(mappedCharacters);
+                            });
+                        return defer;
+                    })
+            })
+            .then(character => {
+                return ctx.getGameAccount()
+                    .then(gameAccount => gameAccount.current = character)
+                    .catch(() => {
+                        ctx._game = { current: character };
+                        return character;
+                    });
+            })
+            .then(character => msgHelper.reply('Playing on : ' + character.name +'.'));
+    }
+
+    return {
+        create: {
+            create: characterCreate,
+            name: characterCreateName,
+            race: characterCreateRace,
+            class: characterCreateClass,
+            sex: characterCreateSex
+        },
+        select: characterSelect
+    }
 };

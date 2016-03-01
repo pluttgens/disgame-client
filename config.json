@@ -1,8 +1,13 @@
 {
-    "apiUrl": "https://mighty-fortress-21458.herokuapp.com",
+    "api": {
+        "url": "https://mighty-fortress-21458.herokuapp.com",
+        "version": "1"
+    },
     "auth": {
         "email": "youremail",
-        "password": "yourpassword"
+        "password": "yourpassword",
+        "apiKey": "yourapikey",
+        "secret": "yoursecret"
     },
     "bot": {
         "avatar": "profile.jpg",

@@ -1,32 +1,24 @@
 'use strict';
 
 const jsonfile = require('jsonfile');
+const Promise = require('bluebird');
 
 const configPath = './config.json';
 const helpPath = __dirname + '/help.json';
 
 const config = jsonfile.readFileSync(configPath);
-const help = jsonfile.readFileSync(helpPath);
+const helpObj = jsonfile.readFileSync(helpPath);
 
 module.exports = function (handler) {
-
     handler.on('help', help);
-
     function help (msgHelper) {
-        if (msgHelper.params.length === 0) {
-            return msgHelper.reply(Object.keys(help).join('\n'));
-        }
-
-        var reply = help[msgHelper.params[0]];
-
-        return msgHelper.reply(reply ? _replaceCmd(reply) : 'Unknown command : ' + msgHelper.params[0]);
-
+        Promise
+            .resolve(msgHelper.params)
+            .then(params => params.length ? msgHelper.reply(helpObj[params[0]] ? _replaceCmd(params[0]) : 'Unknown command : ' + params[0]) : msgHelper.reply(Object.keys(help).join('\n')));
     }
-
     function _replaceCmd(reply) {
-        return reply.replace('%cmd%', config.cmd)
+        return reply.replace('%cmd%', config.cmd, 'g');
     }
-
     return {
         help: help,
         _replaceCmd: _replaceCmd

@@ -1,7 +1,8 @@
 'use strict';
 
-const request = require('request');
 const jsonfile = require('jsonfile');
+const disgame = require('disgame-api');
+const Promise = require('bluebird');
 
 const configPath = './config.json';
 
@@ -14,65 +15,37 @@ function Context (user) {
     this.callback = null;
 }
 
-Context.prototype.getGameAccount = function (callback) {
-    if (!this._game) {
-        return this.authenticate((err, user) => {
-            if (err) {
-                return callback(err);
-            }
-
-            this._game = {
-                id: user._id,
-                characters: user.characters
-            };
-            return callback(err, this._game);
-        });
+Context.prototype.getGameAccount = function (force) {
+    if (force || !this._game) {
+        return this.authenticate()
+            .then(user => {
+                this._game = {user: user};
+                return this._game;
+            });
     }
-
-    return callback(null, this._game);
+    return Promise.resolve(this._game);
 };
 
 Context.prototype.setCallback = function (callback) {
-    this.callback = (msgHelper) => {
-
-        if (msgHelper.command !== 'cancel') {
-            return callback(null, msgHelper);
-        }
-
-        msgHelper.reply('Successfully cancelled : ' + this.state);
-        return callback({cancel: true});
-    }
-};
-
-Context.prototype.authenticate = function (callback) {
-    request({
-        url: config.apiUrl + '/users',
-        method: 'GET',
-        qs: {
-            discordId: this.discordId
-        },
-        json: true
-    }, (err, response, body) => {
-        if (err) {
-            if (callback) {
-                return callback(err);
+    return new Promise((resolve, reject) => {
+        this.callback = (msgHelper) => {
+            if (msgHelper.command !== 'cancel') {
+                return callback(msgHelper, value => {
+                    this.callback = null;
+                    resolve(value);
+                }, reject);
             }
-            return null;
-        }
-
-        if (body.error) {
-            if (callback) {
-                return callback(body.error);
-            }
-            return null;
-        }
-
-        let user = body.users[0];
-
-        if (callback) {
-            return callback(null, user)
+            reject((() => {
+                this.callback = null;
+                return msgHelper.reply('Successfully cancelled : ' + this.state)
+            })());
         }
     });
+};
+
+Context.prototype.authenticate = function () {
+    return disgame.getUser(this.discordId)
+        .then(user => this._game = { user: user});
 };
 
 module.exports = Context;

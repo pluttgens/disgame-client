@@ -5,7 +5,7 @@ module.exports = function (handler) {
         .on('cancel', cancel);
 
     function cancel (msgHelper)  {
-        msgHelper.reply('Nothing to cancel');
+        return msgHelper.reply('Nothing to cancel');
     }
 
     return {

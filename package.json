@@ -9,17 +9,18 @@
   },
   "scripts": {
     "start": "node app.js",
-    "test": "mocha --recursive tests"
+    "test": "mocha --recursive tests",
+    "update-git": "npm install --save izy521/discord.io GenjitsuGame/DisGame-api-wrapper"
   },
-  "author": "Pascal Luttgens",
-  "license": {
-    "type": "MIT",
-    "url": "https://opensource.org/licenses/MIT"
-  },
+  "author": "Pascal Luttgens <pascal.luttgens@hotmail.fr>",
+  "license": "MIT",
   "dependencies": {
+    "DisGame-api-lib": "github:genjitsugame/disgame-api-wrapper",
     "async": "^1.5.2",
+    "bluebird": "^3.3.3",
     "body-parser": "^1.14.2",
-    "discord.io": "^1.7.1",
+    "discord.io": "github:izy521/discord.io",
+    "disgame-api": "github:genjitsugame/disgame-api-wrapper",
     "express": "^4.13.4",
     "jsonfile": "^2.2.3",
     "morgan": "^1.6.1",

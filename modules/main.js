@@ -1,6 +1,7 @@
 'use strict';
 
 const Handler = require('../helpers/handler');
+require('bluebird').config({cancellation: true});
 
 module.exports = function (bot) {
 

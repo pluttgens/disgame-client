@@ -55,9 +55,7 @@ LinkedList.prototype._get = function (e) {
     if (typeof e === 'function') {
         while ((() => {curr = iterator.next(); return !curr.done;})()) {
             curr = curr.value;
-            if (e(curr.elem)) {
-                return curr;
-            }
+            if (e(curr.elem)) return curr;
         }
         return null;
     }

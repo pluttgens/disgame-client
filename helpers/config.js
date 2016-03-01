@@ -5,17 +5,17 @@ module.exports = function () {
 
 ////////////////////////////////////////////////////////////////
 
-// JSONFILE
+    // JSONFILE
 
     const jsonfile = require('jsonfile');
 
     jsonfile.spaces = 4;
 
-    const configPath = './config.json';
+    const configPath = '../config.json';
 
-    const config = jsonfile.readFileSync(configPath);
+    const config = require(configPath);
 
-// WINSTON
+    // WINSTON
 
     const winston = require('winston');
 
@@ -31,4 +31,20 @@ module.exports = function () {
         winston.level = 'info';
     }
 
+    let apiKey;
+    let secret;
+    try {
+        let auth = require('../auth.js');
+        apiKey = auth.apiKey;
+        secret = auth.secret;
+    } catch (e) {
+        apiKey = process.env.API_KEY || config.auth.apiKey;
+        secret = process.env.SECRET || config.auth.secret;
+    }
+
+    require('disgame-api')
+        .connect(apiKey, secret)
+        .then(() => {
+            winston.info('Successfully connected to API Server');
+        });
 };

@@ -1,6 +1,6 @@
 'use strict';
 
-const DiscordClient = require('./lib/index');
+const DiscordClient = require('discord.io');
 
 require('./helpers/config')();
 const winston = require('winston');
@@ -33,7 +33,6 @@ const bot = new DiscordClient({
 bot.on('ready', function () {
     winston.info('Bot started');
 
-    require('./helpers/messageBuffer').construct(bot);
 
     // main
     require('./modules/main')(bot);

@@ -7,8 +7,6 @@ module.exports = function (bot) {
     const jsonfile = require('jsonfile');
     const winston = require('winston');
 
-    const messageBuffer = require('../../helpers/messageBuffer').get();
-
     router
         .post('/', (req, res) => {
             let event = req.get('X-GitHub-Event');

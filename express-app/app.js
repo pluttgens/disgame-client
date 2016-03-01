@@ -16,5 +16,5 @@ module.exports = function (bot) {
     app.locals.config = __dirname + '/config.json';
     app.use('/github', require('./routes/github')(bot));
 
-    app.listen(process.env.PORT || 2102);
+    app.listen(process.env.PORT || 2103);
 };

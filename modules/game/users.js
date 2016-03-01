@@ -1,43 +1,32 @@
 'use strict';
 
-const request = require('request');
-const async = require('async');
 const winston = require('winston');
 const jsonfile = require('jsonfile');
-
+const disgame = require('disgame-api');
 const configPath = './config.json';
 
 const config = jsonfile.readFileSync(configPath);
 
 module.exports = function (handler) {
     handler
-        .on('user:register', function (msgHelper) {
-            request({
-                url: config.apiUrl + '/users/',
-                method: 'POST',
-                body: {
-                    user: msgHelper.getAuthorID()
-                },
-                json: true
-            }, function (err, message, body) {
-                if (err) {
-                    return msgHelper.error(err);
-                }
+        .on('user:register', userRegister);
 
-                if (body.error) {
-                    return msgHelper.reply(body.error);
-                }
-
-                handler.get(msgHelper.getAuthorID()).id = body.id;
-
-                msgHelper.reply('Welcome ' + msgHelper.event.d.author.username + '!\n' +
-                    '----------------------------------------------------------------------------------', (err, response) => {
-                    if (err) {
-                        return msgHelper.error(err);
-                    }
-
-                    handler.emit('character:create', msgHelper);
-                });
+    function userRegister (msgHelper) {
+        return msgHelper
+            .doIfAllowed({ channel : true })
+            .then(() =>  {
+                disgame
+                    .registerUser(msgHelper.getAuthorID())
+                    .then((response) => msgHelper.reply(response.error || 'Welcome ' + msgHelper.event.d.author.username + '!'))
+                    .then((message) => {
+                        handler.emit('character:create', msgHelper.getClean());
+                        return message;
+                    })
+                    .catch(err => msgHelper.error(err));
             });
-        })
+    }
+
+    return {
+        userRegister: userRegister
+    };
 };
