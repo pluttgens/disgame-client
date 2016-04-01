@@ -4,7 +4,7 @@ Discord mmo client
 IMPORTANT
 -------------
 
-In order to run this, you need to also have access the server which runs the game. As we are still in early devlopment stages, it is not yet hosted and there should still be a few weeks before anyone can use it.
+In order to run this, you need to also have access the server which runs the game. As we are still in early development stages, it is not yet hosted and there should still be a few weeks before anyone can use it.
 An api will be made available through a key and a secret. Pulling data will be allowed to any client that registered to the API and game sensitive operations will only be authorized to selected and trusted clients.
 
 Installation :
@@ -27,7 +27,7 @@ Useful links :
 -------------
 [discord-io](https://github.com/izy521/discord.io/wiki/)
 
-[discord unoffical API doc](http://unofficial.discordapi.com/en/latest/)
+[discord unofficial API doc](http://unofficial.discordapi.com/en/latest/)
 
 [discord event structure](http://hornwitser.no/discord/analysis)
 
@@ -58,7 +58,7 @@ In order to understand what can be done with the library, you should check out i
 For performance and maintainability issues, this application uses a `handler` to which `message` event callbacks are registered.
 It is defined in `modules/main.js` and this is where you require other modules and give them the handler so they can register their callbacks.
 
-example :
+Example :
 (ping.js)
 ```
 module.exports = function (handler) {
@@ -96,7 +96,7 @@ module.exports = function (handler) {
                 if (err.cancel) {
                     return context.callback = null; //unregisters the callback.
                 }
-                return msgHelper.error(err); //logs the error and returns 'Internal Servor Error' to the user.
+                return msgHelper.error(err); //logs the error and returns 'Internal Server Error' to the user.
             }
 
             if (msgHelper.event.d.content === 'pong') { //access the raw event returned by discord
@@ -133,7 +133,7 @@ The features that needs to be worked on are the following :
 
 > Refactor the existing modules to return their functions so they can be tested.
 > Write new tests for modules or improve already existing ones. (Except those from the `game folder` since they might change really soon.
-> Write a wrapper librairy for the game server API.
+> Write a wrapper library for the game server API.
 > *coming soon*
 
 Tests :
